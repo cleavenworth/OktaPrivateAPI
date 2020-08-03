@@ -20,8 +20,8 @@ class OktaAdminSession(requests.Session):
             environment = "preview"
         else:
             environment = ""
-        self.base_url = "https://{}.okta{}.com".format(subdomain, environment)
-        self.admin_url = "https://{}-admin.okta{}.com".format(subdomain, environment)
+        self.base_url = f"https://{subdomain}.okta{environment}.com"
+        self.admin_url = f"https://{subdomain}-admin.okta{environment}.com"
         admin_login(username, password, self.base_url, self.admin_url, self)
 
     def strip_js(self, text):
@@ -31,7 +31,7 @@ class OktaAdminSession(requests.Session):
 
     def get_app_instance_name(self, instanceId):
         # Get the app instance name
-        url = "{}/api/v1/apps/{}".format(self.base_url, instanceId)
+        url = f"{self.base_url}/api/v1/apps/{instanceId}"
         app_profile = self.get(url).json()
         instance_name = app_profile["name"]
         return instance_name
@@ -49,9 +49,7 @@ class OktaAdminSession(requests.Session):
             return tag_dict
 
         instanceName = self.get_app_instance_name(instanceId)
-        url = "{}/admin/app/{}/instance/{}/tags".format(
-            self.admin_url, instanceName, instanceId
-        )
+        url = f"{self.admin_url}/admin/app/{instanceName}/instance/{instanceId}/tags"
         tags_json = self.strip_js(self.get(url).text)
         tags = tags_to_dict(tags_json["tags"])
         app_data = {
@@ -72,7 +70,7 @@ class OktaAdminSession(requests.Session):
         firstResult=None,
     ):
 
-        url = "{}/admin/tasks/{}".format(self.admin_url, taskType)
+        url = f"{self.admin_url}/admin/tasks/{taskType}"
         params = {
             "taskDate": taskDate,
             "selectedUserId": selectedUserId,
@@ -86,7 +84,7 @@ class OktaAdminSession(requests.Session):
         def deprovisioning_tasks():
             nonlocal url, params
             if instanceId is not None:
-                url = "{}/instance".format(url)
+                url = f"{url}/instance"
                 params["firstResult"] = 0
                 tasks = self.get(url, params=params).text
                 parser = DeprovisioningTaskParser()

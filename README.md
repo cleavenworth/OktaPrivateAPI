@@ -46,7 +46,7 @@ print(enabled_features)
 
 ### Notes
 
-Special thanks to [@Gabriel Sroka](https://macadmins.slack.com/archives/DPR6L461Z) on MacAdmins Slack who shared the code that `okta_login.py` is based off of.
+Special thanks to [@Gabriel Sroka](https://github.com/gabrielsroka) on MacAdmins Slack who shared the code that `okta_login.py` is based off of.
 
 The Private API will typically respond with either JSON* or HTML. A custom HTMLParser from `html.parser` is used to translate this into JSON. These parsers are found in `parsers.py`.
 
